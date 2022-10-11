@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+        targetNamespace="http://"
+        xmlns="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:tns="http://gajewski.pl/SOAPws" name="getStudent">
+    <types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                   xmlns:tns="http://gajewski.pl/SOAPws"
+                   targetNamespace="http://gajewski.pl/SOAPws"
+        >
+            <xs:element name="getStudent">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="id" type="xs:long"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:element name="getResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="student" type="tns:student"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:complexType name="student">
+                <xs:sequence>
+                    <xs:element name="id" type="xs:long"/>
+                    <xs:element name="name" type="xs:string"/>
+                    <xs:element name="surname" type="xs:string"/>
+                    <xs:element name="age" type="xs:long"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </types>
+    <message name="StudentSoapRequest">
+        <part name="parameters" element="tns:getStudent"/>
+    </message>
+    <message name="StudentSoapResponse">
+        <part name="parameters" element="tns:getResponse"/>
+    </message>
+    <portType name="StudentInformationService">
+        <operation name="WypiszStudentow">
+            <input message="tns:StudentSoapRequest" name="SReq"/>
+            <output message="tns:StudentSoapResponse" name="SRes"/>
+        </operation>
+    </portType>
+    <binding name="StudentSoap11" type="tns:StudentInformationService">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="dawajMiStudenta">
+            <soap:operation soapAction="" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="getStudent">
+        <documentation>...OPis.</documentation>
+        <port name="SzukajStudenta" binding="tns:StudentSoap11">
+            <soap:address location="http://localhost:8080/ws"/>
+        </port>
+    </service>
+</definitions>
